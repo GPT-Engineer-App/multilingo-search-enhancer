@@ -4,9 +4,6 @@ import { FaSearch } from "react-icons/fa";
 
 const LANGUAGES = ["Spanish", "Chinese", "Hindi", "Arabic", "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Wu", "Malay", "Telugu", "Vietnamese", "Korean", "French", "Marathi", "Tamil", "Urdu"];
 
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-const searchEngineId = import.meta.env.VITE_GOOGLE_SEARCH_ENGINE_ID;
-
 const Index = () => {
   const [query, setQuery] = useState("");
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -21,7 +18,7 @@ const Index = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           },
           body: JSON.stringify({
             model: "gpt-4-turbo",
@@ -41,7 +38,7 @@ const Index = () => {
 
     const searchResults = await Promise.all(
       translatedQueries.map(async (translatedQuery, index) => {
-        const response = await fetch(`https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${searchEngineId}&q=${encodeURIComponent(translatedQuery)}`);
+        const response = await fetch(`https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_SEARCH_ENGINE_ID}&q=${encodeURIComponent(translatedQuery)}`);
         const data = await response.json();
         return {
           language: selectedLanguages[index],
